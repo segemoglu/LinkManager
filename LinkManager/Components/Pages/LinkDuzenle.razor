@@ -1,0 +1,104 @@
+﻿@page "/link-duzenle/{Id:int}"
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@using MediatR
+@using LinkManager.Features.Links.Queries
+@using LinkManager.Features.Links.Commands
+@inject IMediator Mediator
+@inject NavigationManager NavManager
+
+<h3>🎨 Linki Düzenle</h3>
+
+@if (Model == null)
+{
+    <p>Yükleniyor...</p>
+}
+else
+{
+    <div class="card p-4 shadow-sm" style="max-width: 600px;">
+        <EditForm Model="@Model" OnValidSubmit="Guncelle">
+            <DataAnnotationsValidator />
+
+            <div class="mb-3">
+                <label>Başlık</label>
+                <InputText @bind-Value="Model.Title" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>URL</label>
+                <InputText @bind-Value="Model.Url" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label>Kategori</label>
+                <InputText @bind-Value="Model.Category" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label>Kart Rengi</label>
+                <InputSelect @bind-Value="Model.ColorClass" class="form-select">
+                    @foreach (var renk in Renkler)
+                    {
+                        <option value="@renk.Value">@renk.Key</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="mb-3">
+                <label>Açıklama</label>
+                <InputTextArea @bind-Value="Model.Description" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+            <a href="/" class="btn btn-secondary w-100 mt-2">İptal</a>
+        </EditForm>
+    </div>
+}
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private UpdateLinkCommand Model;
+
+    // Material Design Renk Paleti (Koyu ve Okunaklı Tonlar)
+    private Dictionary<string, string> Renkler = new Dictionary<string, string>
+    {
+        { "Gece Mavisi", "#2c3e50" },
+        { "Okyanus", "#2980b9" },
+        { "Zümrüt Yeşili", "#27ae60" },
+        { "Vişne Çürüğü", "#c0392b" },
+        { "Turuncu", "#d35400" },
+        { "Mor (Amethyst)", "#8e44ad" },
+        { "Asfalt Gri", "#34495e" },
+        { "Çivit Mavisi", "#3f51b5" },
+        { "Orman Yeşili", "#1b5e20" },
+        { "Koyu Kırmızı", "#b71c1c" },
+        { "Hardal", "#f57f17" },
+        { "Patlıcan Moru", "#4a148c" },
+        { "Petrol Mavisi", "#006064" },
+        { "Çikolata", "#3e2723" },
+        { "Siyah", "#000000" },
+        { "Barut Rengi", "#37474f" },
+        { "Ahududu", "#880e4f" },
+        { "Zeytin", "#33691e" }
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        var link = await Mediator.Send(new GetLinkByIdQuery(Id));
+        if (link != null)
+        {
+            Model = new UpdateLinkCommand
+            {
+                Id = link.Id,
+                Title = link.Title,
+                Url = link.Url,
+                Category = link.Category,
+                Description = link.Description,
+                ColorClass = link.ColorClass
+            };
+        }
+    }
+
+    private async Task Guncelle()
+    {
+        await Mediator.Send(Model);
+        NavManager.NavigateTo("/");
+    }
+}

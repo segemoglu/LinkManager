@@ -1,0 +1,49 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+
+<div class="page">
+    <main>
+        <div class="top-bar d-flex justify-content-between align-items-center px-4 py-3 shadow-sm"
+             style="background-color: #e3f2fd; border-bottom: 1px solid #90caf9;">
+
+            <div class="d-flex align-items-center gap-2">
+                <span class="fs-1">🔗</span>
+                <h1 class="h3 fw-bold m-0 text-primary" style="letter-spacing: 1px;">
+                    FERRE LINK MANAGER
+                </h1>
+            </div>
+
+            <div>
+                <AuthorizeView>
+                    <Authorized>
+                        <span class="me-2 text-muted fw-bold d-none d-md-inline">Hoşgeldin, @context.User.Identity?.Name</span>
+                        <a href="/account/logout" class="btn btn-outline-danger btn-sm fw-bold">Çıkış Yap</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="/login" class="btn btn-outline-primary btn-sm fw-bold">Yönetici Girişi</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </div>
+        <article class="content px-4 py-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<style>
+    body {
+        /* Zemin Rengi: Çok açık gri-mavi */
+        background-color: #f4f6f8;
+        /* Desen: Silik gri noktalar */
+        background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+        /* Noktaların sıklığı (30px aralıklarla) */
+        background-size: 30px 30px;
+    }
+
+    /* İçerik biraz daha derli toplu dursun diye */
+    .content {
+        max-width: 1600px; /* Çok geniş ekranlarda yayılmasın */
+        margin: 0 auto; /* Ortala */
+    }
+</style>

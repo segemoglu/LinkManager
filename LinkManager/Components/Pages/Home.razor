@@ -1,0 +1,128 @@
+﻿@page "/"
+@using MediatR
+@using LinkManager.Domain
+@using LinkManager.Features.Links.Queries
+@using LinkManager.Features.Links.Commands
+@using Microsoft.AspNetCore.Components.Authorization
+@inject IMediator Mediator
+@inject IJSRuntime JS
+
+<PageTitle>Ferre Link Manager</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-8">
+            <div class="input-group input-group-lg shadow-sm">
+                <span class="input-group-text bg-white border-0"><i class="fa-solid fa-search text-muted"></i>🔍</span>
+                <input type="text" class="form-control border-0"
+                       placeholder="Link adı, kategori veya açıklama ara..."
+                       @bind="AramaMetni" @bind:event="oninput" />
+
+                <AuthorizeView>
+                    <Authorized>
+                        <a href="/link-ekle" class="btn btn-success px-4 d-flex align-items-center">
+                            <span class="fs-5 me-2">+</span> Ekle
+                        </a>
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+        </div>
+    </div>
+
+    @if (TumLinkler == null)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2 text-muted">Linkler yükleniyor...</p>
+        </div>
+    }
+    else
+    {
+        <div class="row px-3">
+            @foreach (var link in FiltreliLinkler)
+            {
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm border-0 text-white position-relative overflow-hidden"
+                         style="background-color: @link.ColorClass; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);">
+
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title fw-bold m-0 text-truncate" title="@link.Title">@link.Title</h5>
+                                <span class="badge bg-white text-dark bg-opacity-25 border border-white border-opacity-25">@link.Category</span>
+                            </div>
+
+                            <p class="card-text opacity-75 small flex-grow-1" style="min-height: 40px;">
+                                @(link.Description.Length > 80 ? link.Description.Substring(0, 77) + "..." : link.Description)
+                            </p>
+                        </div>
+
+                        <div class="card-footer border-0 bg-transparent pt-0 d-flex gap-2">
+                            <a href="@link.Url" target="_blank" class="btn btn-light flex-grow-1 text-dark fw-bold shadow-sm btn-sm py-2">
+                                Git 🚀
+                            </a>
+
+                            <AuthorizeView>
+                                <Authorized>
+                                    <a href="/link-duzenle/@link.Id" class="btn btn-light text-warning shadow-sm btn-sm px-3" title="Düzenle">✏️</a>
+                                    <button class="btn btn-light text-danger shadow-sm btn-sm px-3" title="Sil" @onclick="() => Sil(link)">🗑️</button>
+                                </Authorized>
+                            </AuthorizeView>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!FiltreliLinkler.Any() && TumLinkler.Any())
+        {
+            <div class="text-center mt-5 text-muted">
+                <h4>🤷‍♂️ Sonuç bulunamadı</h4>
+                <p>"@AramaMetni" için başka bir şey deneyin.</p>
+            </div>
+        }
+    }
+</div>
+
+<style>
+    /* Kart Hover Efekti */
+    .card:hover {
+        transform: translateY(-7px) scale(1.01);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Arama Kutusu Odaklanma */
+    .form-control:focus {
+        box-shadow: none;
+    }
+
+    .input-group:focus-within {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    }
+</style>
+
+@code {
+    private List<LinkItem>? TumLinkler;
+    private string AramaMetni { get; set; } = "";
+
+    private IEnumerable<LinkItem> FiltreliLinkler =>
+        string.IsNullOrWhiteSpace(AramaMetni)
+            ? TumLinkler ?? new List<LinkItem>()
+            : TumLinkler.Where(l =>
+                l.Title.Contains(AramaMetni, StringComparison.OrdinalIgnoreCase) ||
+                l.Category.Contains(AramaMetni, StringComparison.OrdinalIgnoreCase));
+
+    protected override async Task OnInitializedAsync()
+    {
+        TumLinkler = await Mediator.Send(new GetLinksQuery());
+    }
+
+    private async Task Sil(LinkItem link)
+    {
+        bool onay = await JS.InvokeAsync<bool>("confirm", $"{link.Title} silinsin mi?");
+        if (onay)
+        {
+            await Mediator.Send(new DeleteLinkCommand(link.Id));
+            TumLinkler.Remove(link);
+        }
+    }
+}
