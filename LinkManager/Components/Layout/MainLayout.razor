@@ -1,7 +1,19 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 
-<div class="page-wrapper">
+<div class="page-wrapper @(IsDarkMode ? "dark-theme" : "light-theme")">
+
+    @* Sitenin en arka planı olan body etiketini karanlık moda zorluyoruz *@
+    @if (IsDarkMode)
+    {
+        <style>
+            body {
+                background-color: #0f172a !important;
+                background-image: none !important;
+            }
+        </style>
+    }
+
     <main>
         <nav class="modern-topbar px-4 py-3">
             <div class="d-flex align-items-center gap-3">
@@ -16,6 +28,11 @@
             </div>
 
             <div class="user-actions">
+
+                <button class="btn btn-theme-toggle shadow-sm" @onclick="ToggleTheme" title="Temayı Değiştir">
+                    <i class="fa-solid @(IsDarkMode ? "fa-sun text-warning" : "fa-moon text-secondary") fs-5"></i>
+                </button>
+
                 <AuthorizeView>
                     <Authorized>
                         <div class="user-badge d-none d-md-flex">
@@ -40,13 +57,16 @@
 </div>
 
 <style>
-    /* 1. PREMIUM ARKA PLAN (Hafif köşelerden parlayan soft doku) */
+    /* ==========================================
+           1. STANDART (AYDINLIK) TEMA STİLLERİ
+           ========================================== */
     body {
         background-color: #f8fafc;
         background-image: radial-gradient(at 0% 0%, hsla(210, 100%, 97%, 1) 0, transparent 50%), radial-gradient(at 100% 100%, hsla(210, 100%, 95%, 1) 0, transparent 50%);
         background-attachment: fixed;
         font-family: 'Inter', sans-serif;
         margin: 0;
+        transition: background-color 0.3s ease;
     }
 
     .content {
@@ -54,7 +74,6 @@
         margin: 0 auto;
     }
 
-    /* 2. BUZLU CAM ÜST BAR */
     .modern-topbar {
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(12px);
@@ -67,9 +86,9 @@
         position: sticky;
         top: 0;
         z-index: 1000;
+        transition: all 0.3s ease;
     }
 
-    /* 3. LOGO VE İKON TASARIMI */
     .logo-icon {
         background: linear-gradient(135deg, #0ea5e9, #2563eb);
         color: white;
@@ -88,6 +107,7 @@
         font-weight: 800;
         letter-spacing: -0.5px;
         color: #1e293b;
+        transition: color 0.3s;
     }
 
     .logo-highlight {
@@ -97,7 +117,6 @@
         font-weight: 700;
     }
 
-    /* 4. KULLANICI BİLGİSİ VE BUTONLAR */
     .user-actions {
         display: flex;
         align-items: center;
@@ -109,6 +128,7 @@
         align-items: center;
         gap: 0.75rem;
         color: #475569;
+        transition: color 0.3s;
     }
 
     .avatar {
@@ -121,7 +141,27 @@
         align-items: center;
         justify-content: center;
         font-size: 1rem;
+        transition: all 0.3s;
     }
+
+    /* Tema Butonu Tasarımı */
+    .btn-theme-toggle {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 50%;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        padding: 0;
+    }
+
+        .btn-theme-toggle:hover {
+            transform: scale(1.05);
+            background: #f8fafc;
+        }
 
     .btn-modern-primary {
         background: #2563eb;
@@ -130,15 +170,15 @@
         border-radius: 8px;
         font-weight: 600;
         text-decoration: none;
-        transition: all 0.2s;
         border: none;
+        transition: all 0.2s;
     }
 
         .btn-modern-primary:hover {
             background: #1d4ed8;
-            color: white;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            color: white;
         }
 
     .btn-modern-danger {
@@ -156,4 +196,94 @@
             background: #fee2e2;
             color: #dc2626;
         }
+
+    /* ==========================================
+           2. DARK MODE (KARANLIK TEMA) KÜRESEL EZİCİLER
+           Bu CSS sınıfları diğer sayfalardaki beyaz Bootstrap kodlarını ezer.
+           ========================================== */
+    .dark-theme .modern-topbar {
+        background: rgba(15, 23, 42, 0.85);
+        border-bottom: 1px solid rgba(51, 65, 85, 0.8);
+    }
+
+    .dark-theme .logo-text {
+        color: #f8fafc;
+    }
+
+    .dark-theme .user-badge {
+        color: #cbd5e1;
+    }
+
+    .dark-theme .avatar {
+        background: #334155;
+        color: #94a3b8;
+    }
+
+    .dark-theme .btn-theme-toggle {
+        background: #1e293b;
+        border-color: #334155;
+    }
+
+        .dark-theme .btn-theme-toggle:hover {
+            background: #334155;
+        }
+
+    /* Diğer Sayfalar (Home, Ekle, Düzenle) İçin Ortak Dark Mode Eziciler */
+    .dark-theme .card,
+    .dark-theme .bg-white {
+        background-color: #1e293b !important; /* Satır içi background:white stilini bile ezer */
+        color: #f8fafc !important;
+        border-color: #334155 !important;
+    }
+
+    .dark-theme .text-dark {
+        color: #f8fafc !important;
+    }
+
+    .dark-theme .text-muted {
+        color: #94a3b8 !important;
+    }
+
+    /* Form Elemanları (Input, Select, Textarea) */
+    .dark-theme .form-control,
+    .dark-theme .form-select {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+
+        .dark-theme .form-control:focus,
+        .dark-theme .form-select:focus {
+            background-color: #0f172a !important;
+            border-color: #3b82f6 !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25) !important;
+        }
+
+    .dark-theme .input-group-text {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #cbd5e1 !important;
+    }
+
+
+    /* Kartların altındaki butonları Dark Mode'da düzeltir */
+    .dark-theme .card-footer .btn {
+        background-color: #3b82f6 !important; /* Modern mavi */
+        color: #ffffff !important;
+        border: none !important;
+    }
+
+        .dark-theme .card-footer .btn:hover {
+            background-color: #2563eb !important;
+        }
 </style>
+
+@code {
+    private bool IsDarkMode = false;
+
+    private void ToggleTheme()
+    {
+        IsDarkMode = !IsDarkMode;
+    }
+}
