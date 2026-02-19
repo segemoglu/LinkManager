@@ -5,27 +5,30 @@
 @inject IMediator Mediator
 @inject NavigationManager NavManager
 
-<h3>🎨 Yeni Link Ekle</h3>
+<div class="card p-4 shadow-lg mx-auto mt-5 border-0" style="max-width: 600px; border-radius: 12px;">
 
-<div class="card p-4 shadow-sm" style="max-width: 600px;">
+    <h3 class="text-center mb-4 fw-bold text-primary">🎨 Yeni Link Ekle</h3>
+
     <EditForm Model="@Model" OnValidSubmit="Kaydet">
         <DataAnnotationsValidator />
 
         <div class="mb-3">
-            <label>Başlık</label>
+            <label class="fw-bold text-secondary mb-1">Başlık</label>
             <InputText @bind-Value="Model.Title" class="form-control" />
         </div>
+
         <div class="mb-3">
-            <label>URL</label>
-            <InputText @bind-Value="Model.Url" class="form-control" />
+            <label class="fw-bold text-secondary mb-1">URL</label>
+            <InputText @bind-Value="Model.Url" class="form-control" placeholder="http://..." />
         </div>
+
         <div class="mb-3">
-            <label>Kategori</label>
+            <label class="fw-bold text-secondary mb-1">Kategori</label>
             <InputText @bind-Value="Model.Category" class="form-control" />
         </div>
 
         <div class="mb-3">
-            <label>Kart Rengi</label>
+            <label class="fw-bold text-secondary mb-1">Kart Rengi</label>
             <InputSelect @bind-Value="Model.ColorClass" class="form-select">
                 @foreach (var renk in Renkler)
                 {
@@ -35,19 +38,18 @@
         </div>
 
         <div class="mb-3">
-            <label>Açıklama</label>
-            <InputTextArea @bind-Value="Model.Description" class="form-control" />
+            <label class="fw-bold text-secondary mb-1">Açıklama</label>
+            <InputTextArea @bind-Value="Model.Description" class="form-control" rows="3" />
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Kaydet</button>
+        <button type="submit" class="btn btn-success w-100 btn-lg shadow-sm">💾 Kaydet</button>
+        <a href="/" class="btn btn-secondary w-100 mt-2">İptal</a>
     </EditForm>
 </div>
 
 @code {
     private CreateLinkCommand Model = new CreateLinkCommand();
 
-    // Renk seçenekleri ve Bootstrap karşılıkları
-    // Material Design Renk Paleti (Koyu ve Okunaklı Tonlar)
     private Dictionary<string, string> Renkler = new Dictionary<string, string>
     {
         { "Gece Mavisi", "#2c3e50" },

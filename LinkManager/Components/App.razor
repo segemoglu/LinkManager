@@ -14,6 +14,39 @@
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    window.showDeleteConfirmation = function (title) {
+        return Swal.fire({
+            title: 'Emin misiniz?',
+            html: `<strong>${title}</strong> silinecek. Bu işlem geri alınamaz!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Evet, Sil 🗑️',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            return result.isConfirmed;
+        });
+    };
+
+    window.showSuccessAlert = function (message) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    };
+</script>
+
+
 <body>
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>

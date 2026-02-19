@@ -48,7 +48,7 @@
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-start mb-2">
                                 <h5 class="card-title fw-bold m-0 text-truncate" title="@link.Title">@link.Title</h5>
-                                <span class="badge bg-white text-dark bg-opacity-25 border border-white border-opacity-25">@link.Category</span>
+                                <span class="badge bg-white text-white bg-opacity-25 border border-white border-opacity-25">@link.Category</span>
                             </div>
 
                             <p class="card-text opacity-75 small flex-grow-1" style="min-height: 40px;">
@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="card-footer border-0 bg-transparent pt-0 d-flex gap-2">
-                            <a href="@link.Url" target="_blank" class="btn btn-light flex-grow-1 text-dark fw-bold shadow-sm btn-sm py-2">
+                            <a href="@(link.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? link.Url : $"http://{link.Url}")" target="_blank" class="btn btn-light flex-grow-1 text-dark fw-bold shadow-sm btn-sm py-2">
                                 Git 🚀
                             </a>
 
@@ -118,11 +118,22 @@
 
     private async Task Sil(LinkItem link)
     {
-        bool onay = await JS.InvokeAsync<bool>("confirm", $"{link.Title} silinsin mi?");
+        // 1. Artık kendi yazdığımız JS fonksiyonunu çağırıyoruz
+        bool onay = await JS.InvokeAsync<bool>("showDeleteConfirmation", link.Title);
+
         if (onay)
         {
+            // 2. Veritabanından sil
             await Mediator.Send(new DeleteLinkCommand(link.Id));
+
+            // 3. Ekrandan sil
             TumLinkler.Remove(link);
+
+            // 4. Sağ üstte şık bir başarı bildirimi göster! (Opsiyonel ama çok havalı)
+            await JS.InvokeVoidAsync("showSuccessAlert", "Link başarıyla silindi!");
+
+            // Ekranı güncellemek için
+            StateHasChanged();
         }
     }
 }
