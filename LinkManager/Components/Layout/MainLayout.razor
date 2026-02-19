@@ -1,50 +1,159 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
 
-<div class="page">
+<div class="page-wrapper">
     <main>
-        <div class="top-bar d-flex justify-content-between align-items-center px-4 py-3 shadow-sm"
-             style="background-color: #e3f2fd; border-bottom: 1px solid #90caf9;">
-
-            <div class="d-flex align-items-center gap-2">
-                <span class="fs-1">🔗</span>
-                <h1 class="h3 fw-bold m-0 text-primary" style="letter-spacing: 1px;">
-                    FERRE LINK MANAGER
-                </h1>
+        <nav class="modern-topbar px-4 py-3">
+            <div class="d-flex align-items-center gap-3">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-link"></i>
+                </div>
+                <a href="/" class="text-decoration-none">
+                    <h1 class="logo-text m-0">
+                        FERRE <span class="logo-highlight">LINK MANAGER</span>
+                    </h1>
+                </a>
             </div>
 
-            <div>
+            <div class="user-actions">
                 <AuthorizeView>
                     <Authorized>
-                        <span class="me-2 text-muted fw-bold d-none d-md-inline">Hoşgeldin, @context.User.Identity?.Name</span>
-                        <a href="/account/logout" class="btn btn-outline-danger btn-sm fw-bold">Çıkış Yap</a>
+                        <div class="user-badge d-none d-md-flex">
+                            <div class="avatar">
+                                <i class="fa-solid fa-user"></i>
+                            </div>
+                            <span class="fw-medium">@context.User.Identity?.Name</span>
+                        </div>
+                        <a href="/account/logout" class="btn btn-modern-danger">Çıkış Yap</a>
                     </Authorized>
                     <NotAuthorized>
-                        <a href="/login" class="btn btn-outline-primary btn-sm fw-bold">Yönetici Girişi</a>
+                        <a href="/login" class="btn btn-modern-primary">Yönetici Girişi</a>
                     </NotAuthorized>
                 </AuthorizeView>
             </div>
-        </div>
-        <article class="content px-4 py-4">
+        </nav>
+
+        <article class="content px-4 py-5">
             @Body
         </article>
     </main>
 </div>
 
 <style>
+    /* 1. PREMIUM ARKA PLAN (Hafif köşelerden parlayan soft doku) */
     body {
+        background-color: #f8fafc;
+        background-image: radial-gradient(at 0% 0%, hsla(210, 100%, 97%, 1) 0, transparent 50%), radial-gradient(at 100% 100%, hsla(210, 100%, 95%, 1) 0, transparent 50%);
+        background-attachment: fixed;
         font-family: 'Inter', sans-serif;
-        /* Zemin Rengi: Çok açık gri-mavi */
-        background-color: #f4f6f8;
-        /* Desen: Silik gri noktalar */
-        background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
-        /* Noktaların sıklığı (30px aralıklarla) */
-        background-size: 30px 30px;
+        margin: 0;
     }
 
-    /* İçerik biraz daha derli toplu dursun diye */
     .content {
-        max-width: 1600px; /* Çok geniş ekranlarda yayılmasın */
-        margin: 0 auto; /* Ortala */
+        max-width: 1400px;
+        margin: 0 auto;
     }
+
+    /* 2. BUZLU CAM ÜST BAR */
+    .modern-topbar {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    /* 3. LOGO VE İKON TASARIMI */
+    .logo-icon {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        color: white;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+    }
+
+    .logo-text {
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #1e293b;
+    }
+
+    .logo-highlight {
+        background: linear-gradient(135deg, #0ea5e9, #2563eb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+    }
+
+    /* 4. KULLANICI BİLGİSİ VE BUTONLAR */
+    .user-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .user-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: #475569;
+    }
+
+    .avatar {
+        background: #e2e8f0;
+        color: #64748b;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .btn-modern-primary {
+        background: #2563eb;
+        color: white;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: none;
+    }
+
+        .btn-modern-primary:hover {
+            background: #1d4ed8;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+    .btn-modern-danger {
+        background: #fef2f2;
+        color: #ef4444;
+        padding: 0.5rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid #fee2e2;
+        transition: all 0.2s;
+    }
+
+        .btn-modern-danger:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
 </style>
