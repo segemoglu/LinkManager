@@ -42,29 +42,39 @@
             @foreach (var link in FiltreliLinkler)
             {
                 <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 shadow-sm border-0 text-white position-relative overflow-hidden"
-                         style="background-color: @link.ColorClass; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);">
+                    <div class="card h-100 modern-card shadow-sm border-0 position-relative overflow-hidden" style="--kart-rengi: @link.ColorClass;">
 
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex justify-content-between align-items-start mb-2">
-                                <h5 class="fw-bold"><i class="@link.IconClass me-2"></i>@link.Title</h5>
-                                <span class="badge bg-white text-white bg-opacity-25 border border-white border-opacity-25">@link.Category</span>
+                        <div class="card-top-accent"></div>
+
+                        <div class="card-body p-4 d-flex flex-column">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="fw-bolder m-0 text-dark card-title-text d-flex align-items-center gap-3" style="letter-spacing: -0.5px;">
+                                    <div class="icon-box">
+                                        <i class="@link.IconClass"></i>
+                                    </div>
+                                    @link.Title
+                                </h5>
+                                <span class="badge rounded-pill category-badge">@link.Category</span>
                             </div>
 
-                            <p class="card-text opacity-75 small flex-grow-1" style="min-height: 40px;">
-                                @(link.Description.Length > 80 ? link.Description.Substring(0, 77) + "..." : link.Description)
-                            </p>
+                            <div class="url-display mb-3 px-3 py-2 rounded-3 d-flex align-items-center gap-2" title="@link.Url">
+                                <i class="fa-solid fa-globe text-muted" style="font-size: 0.85rem;"></i>
+                                <span class="text-truncate url-text">
+                                    @link.Url
+                                </span>
+                            </div>
+
+                            <p class="text-muted small flex-grow-1" style="line-height: 1.6;">@link.Description</p>
                         </div>
 
-                        <div class="card-footer border-0 bg-transparent pt-0 d-flex gap-2">
-                            <a href="@(link.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? link.Url : $"http://{link.Url}")" target="_blank" class="btn btn-light flex-grow-1 text-dark fw-bold shadow-sm btn-sm py-2">
-                                Git 🚀
+                        <div class="card-footer bg-transparent border-0 px-4 pb-4 pt-0 d-flex gap-2">
+                            <a href="@(link.Url.StartsWith("http") ? link.Url : $"http://{link.Url}")" target="_blank" class="btn btn-visit btn-sm flex-grow-1 fw-bold rounded-3">
+                                Ziyaret Et <i class="fa-solid fa-arrow-up-right-from-square ms-1" style="font-size: 0.75rem;"></i>
                             </a>
-
                             <AuthorizeView>
                                 <Authorized>
-                                    <a href="/link-duzenle/@link.Id" class="btn btn-light text-warning shadow-sm btn-sm px-3" title="Düzenle">✏️</a>
-                                    <button class="btn btn-light text-danger shadow-sm btn-sm px-3" title="Sil" @onclick="() => Sil(link)">🗑️</button>
+                                    <a href="/link-duzenle/@link.Id" class="btn btn-light btn-sm border rounded-3 text-secondary"><i class="fa-solid fa-pen"></i></a>
+                                    <button @onclick="() => Sil(link)" class="btn btn-light btn-sm border text-danger rounded-3"><i class="fa-solid fa-trash"></i></button>
                                 </Authorized>
                             </AuthorizeView>
                         </div>
@@ -97,6 +107,102 @@
 
     .input-group:focus-within {
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25) !important;
+    }
+
+
+
+    /* Kartın Genel Yapısı ve Animasyonu */
+    .modern-card {
+        border-radius: 16px;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        background: #ffffff;
+    }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08) !important;
+        }
+
+    /* Üstteki Modern Renk Geçişi (Gradyan) */
+    .card-top-accent {
+        height: 5px;
+        width: 100%;
+        background: linear-gradient(90deg, var(--kart-rengi), color-mix(in srgb, var(--kart-rengi) 30%, white));
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    /* İkon Kutucuğu (Hafif Şeffaf Arka Plan) */
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        background-color: color-mix(in srgb, var(--kart-rengi) 12%, transparent);
+        color: var(--kart-rengi);
+    }
+
+    /* Kategori Rozeti */
+    .category-badge {
+        background-color: var(--kart-rengi);
+        color: white;
+        font-weight: 500;
+        padding: 0.4em 0.8em;
+    }
+
+    /* URL / IP Gösterim Alanı */
+    .url-display {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+
+    .url-text {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.85rem;
+        color: #475569;
+        font-weight: 600;
+    }
+
+    /* Dinamik Renkli Buton */
+    .btn-visit {
+        background-color: var(--kart-rengi);
+        color: white;
+        border: none;
+        transition: filter 0.2s;
+    }
+
+        .btn-visit:hover {
+            filter: brightness(1.1); /* Üzerine gelince rengi parlar */
+            color: white;
+        }
+
+    /* === DARK MODE UYUMLULUĞU === */
+    .dark-theme .modern-card {
+        background: #1e293b !important;
+        border: 1px solid #334155 !important;
+    }
+
+    .dark-theme .card-title-text {
+        color: #f8fafc !important;
+    }
+
+    .dark-theme .url-display {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+    }
+
+    .dark-theme .url-text {
+        color: #94a3b8 !important;
+    }
+
+    .dark-theme .btn-light {
+        background-color: #334155 !important;
+        border-color: #475569 !important;
+        color: #cbd5e1 !important;
     }
 </style>
 
