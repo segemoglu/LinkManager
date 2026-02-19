@@ -1,8 +1,8 @@
 ﻿@page "/link-duzenle/{Id:int}"
 @attribute [Microsoft.AspNetCore.Authorization.Authorize]
 @using MediatR
-@using LinkManager.Features.Links.Queries
-@using LinkManager.Features.Links.Commands
+@using LinkManager.Feature.Links.Queries
+@using LinkManager.Feature.Links.Commands
 @inject IMediator Mediator
 @inject NavigationManager NavManager
 
@@ -35,6 +35,15 @@ else
             <div class="mb-3">
                 <label class="fw-bold text-secondary mb-1">Kategori</label>
                 <InputText @bind-Value="Model.Category" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label class="fw-bold mb-1">İkon (FontAwesome)</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="@Model.IconClass"></i></span>
+                    <InputText @bind-Value="Model.IconClass" class="form-control" placeholder="Örn: fa-solid fa-house" />
+                </div>
+                <small class="text-muted">İkon kodlarını <a href="https://fontawesome.com/search?o=r&m=free" target="_blank">buradan</a> bulabilirsiniz.</small>
             </div>
 
             <div class="mb-3">
@@ -96,7 +105,8 @@ else
                 Url = link.Url,
                 Category = link.Category,
                 Description = link.Description,
-                ColorClass = link.ColorClass
+                ColorClass = link.ColorClass,
+                IconClass = link.IconClass
             };
         }
     }

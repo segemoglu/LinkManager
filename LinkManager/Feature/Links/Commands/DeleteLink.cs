@@ -3,7 +3,7 @@ using LinkManager.Infrastructure;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace LinkManager.Features.Links.Commands
+namespace LinkManager.Feature.Links.Commands
 {
     // 1. KOMUT: "Şu ID'li linki sil" diyoruz.
     public record DeleteLinkCommand(int Id) : IRequest;

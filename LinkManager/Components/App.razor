@@ -37,16 +37,15 @@
     };
 
     window.showSuccessAlert = function (message) {
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: message,
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true
-        });
-    };
+            Swal.fire({
+                position: 'center', // Ekranda tam ortaya alır
+                icon: 'success',
+                title: message,
+                showConfirmButton: false, // "Tamam" butonunu gizler (otomatik kapanması için)
+                timer: 2000, // 2 saniye ekranda kalır
+                timerProgressBar: true // Altında akan şık bir süre çubuğu çıkartır
+            });
+        };
 </script>
 
 

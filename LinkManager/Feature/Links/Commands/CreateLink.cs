@@ -2,7 +2,7 @@
 using LinkManager.Infrastructure;
 using MediatR;
 
-namespace LinkManager.Features.Links.Commands
+namespace LinkManager.Feature.Links.Commands
 {
     public class CreateLinkCommand : IRequest<int>
     {
@@ -10,7 +10,8 @@ namespace LinkManager.Features.Links.Commands
         public string Url { get; set; } = "";
         public string Category { get; set; } = "";
         public string Description { get; set; } = "";
-        public string ColorClass { get; set; } = "bg-white text-dark"; // YENİ
+        public string ColorClass { get; set; } = "bg-white text-dark";
+        public string IconClass { get; set; } = "fa-solid fa-link"; // Eklendi
     }
 
     public class CreateLinkHandler : IRequestHandler<CreateLinkCommand, int>
@@ -26,7 +27,8 @@ namespace LinkManager.Features.Links.Commands
                 Url = request.Url,
                 Category = request.Category,
                 Description = request.Description,
-                ColorClass = request.ColorClass, // KAYDET
+                ColorClass = request.ColorClass,
+                IconClass = request.IconClass, // Eklendi
                 IsActive = true
             };
 

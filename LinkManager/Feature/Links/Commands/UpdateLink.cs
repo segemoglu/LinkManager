@@ -1,7 +1,7 @@
 ﻿using LinkManager.Infrastructure;
 using MediatR;
 
-namespace LinkManager.Features.Links.Commands
+namespace LinkManager.Feature.Links.Commands
 {
     public class UpdateLinkCommand : IRequest
     {
@@ -10,7 +10,8 @@ namespace LinkManager.Features.Links.Commands
         public string Url { get; set; } = "";
         public string Category { get; set; } = "";
         public string Description { get; set; } = "";
-        public string ColorClass { get; set; } = ""; // YENİ
+        public string ColorClass { get; set; } = "";
+        public string IconClass { get; set; } = "fa-solid fa-link"; // Eklendi
     }
 
     public class UpdateLinkHandler : IRequestHandler<UpdateLinkCommand>
@@ -27,7 +28,8 @@ namespace LinkManager.Features.Links.Commands
                 link.Url = request.Url;
                 link.Category = request.Category;
                 link.Description = request.Description;
-                link.ColorClass = request.ColorClass; // GÜNCELLE
+                link.ColorClass = request.ColorClass;
+                link.IconClass = request.IconClass; // Eklendi
 
                 await _context.SaveChangesAsync(cancellationToken);
             }

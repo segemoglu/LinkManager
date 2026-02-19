@@ -11,8 +11,9 @@ namespace LinkManager.Domain
         public string Description { get; set; } = string.Empty;
         public string Category { get; set; } = "Genel";
         public bool IsActive { get; set; } = true;
-
-        // YENİ ÖZELLİK: Kart Rengi (Varsayılan Beyaz)
         public string ColorClass { get; set; } = "bg-white text-dark";
+
+        // YENİ EKLENEN KISIM
+        public string IconClass { get; set; } = "fa-solid fa-link";
     }
 }
