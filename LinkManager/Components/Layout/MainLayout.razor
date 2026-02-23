@@ -17,7 +17,7 @@
     <main>
         <nav class="modern-topbar px-4 py-3">
             <div class="d-flex align-items-center">
-                <a href="/" class="text-decoration-none d-flex align-items-center gap-2">
+                <a href="/" class="text-decoration-none d-flex align-items-center gap-2" style="margin-top: -6px;">
                     <img src="/images/logo.png" alt="Ferre Logo" class="company-logo" />
                     <span class="logo-highlight logo-text">LINK MANAGER</span>
                 </a>
@@ -54,8 +54,8 @@
 
 <style>
     /* ==========================================
-               1. STANDART (AYDINLIK) TEMA STİLLERİ
-               ========================================== */
+                   1. STANDART (AYDINLIK) TEMA STİLLERİ
+                   ========================================== */
     body {
         background-color: #f8fafc;
         background-image: radial-gradient(at 0% 0%, hsla(210, 100%, 97%, 1) 0, transparent 50%), radial-gradient(at 100% 100%, hsla(210, 100%, 95%, 1) 0, transparent 50%);
@@ -87,10 +87,10 @@
 
     /* Şirket Logosu Ayarı */
     .company-logo {
-        height: 34px; /* Logoyu bir tık daha kibar ve orantılı yaptık */
+        height: 34px;
         width: auto;
         object-fit: contain;
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
     }
 
         .company-logo:hover {
@@ -99,15 +99,15 @@
 
     /* Yanındaki Yazı Ayarı */
     .logo-text {
-        font-size: 2.30rem; /* Logoyla ezilmemesi için biraz ufaltıldı */
+        font-size: 2.30rem;
         font-weight: 800;
         letter-spacing: 0.5px;
-        color: #1e293b;
+        color: #2563eb; /* Ferre lacivertine uyumlu renk */
         transition: color 0.3s;
-        line-height: 1; /* Yazının etrafındaki gizli boşluğu sildik */
-        margin-top: 5px; /* Optik olarak logoyla tam orta hizaya çektik */
+        line-height: 1;
+        margin-top: 5px;
     }
-    
+
     .user-actions {
         display: flex;
         align-items: center;
@@ -189,16 +189,17 @@
         }
 
     /* ==========================================
-               2. DARK MODE (KARANLIK TEMA) KÜRESEL EZİCİLER
-               Bu CSS sınıfları diğer sayfalardaki beyaz Bootstrap kodlarını ezer.
-               ========================================== */
+                   2. DARK MODE (KARANLIK TEMA) KÜRESEL EZİCİLER
+                   ========================================== */
+
+    /* Logoyu karanlık modda bembeyaz yapar */
+    .dark-theme .company-logo {
+        filter: brightness(0) invert(1);
+    }
+
     .dark-theme .modern-topbar {
         background: rgba(15, 23, 42, 0.85);
         border-bottom: 1px solid rgba(51, 65, 85, 0.8);
-    }
-
-    .dark-theme .logo-text {
-        color: #f8fafc;
     }
 
     .dark-theme .user-badge {
@@ -222,7 +223,7 @@
     /* Diğer Sayfalar (Home, Ekle, Düzenle) İçin Ortak Dark Mode Eziciler */
     .dark-theme .card,
     .dark-theme .bg-white {
-        background-color: #1e293b !important; /* Satır içi background:white stilini bile ezer */
+        background-color: #1e293b !important;
         color: #f8fafc !important;
         border-color: #334155 !important;
     }
@@ -257,10 +258,9 @@
         color: #cbd5e1 !important;
     }
 
-
     /* Kartların altındaki butonları Dark Mode'da düzeltir */
     .dark-theme .card-footer .btn {
-        background-color: #3b82f6 !important; /* Modern mavi */
+        background-color: #3b82f6 !important;
         color: #ffffff !important;
         border: none !important;
     }
