@@ -1,13 +1,19 @@
 ﻿using LinkManager.Domain;
 using LinkManager.Infrastructure;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace LinkManager.Feature.Links.Commands
 {
     public class CreateLinkCommand : IRequest<int>
     {
+        [Required(ErrorMessage = "Başlık alanı boş bırakılamaz!")]
         public string Title { get; set; } = "";
+
+        [Required(ErrorMessage = "URL alanı boş bırakılamaz!")]
         public string Url { get; set; } = "";
+
+
         public string Category { get; set; } = "";
         public string Description { get; set; } = "";
         public string ColorClass { get; set; } = "bg-white text-dark";

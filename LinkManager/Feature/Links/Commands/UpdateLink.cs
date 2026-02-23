@@ -1,12 +1,16 @@
 ﻿using LinkManager.Infrastructure;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace LinkManager.Feature.Links.Commands
 {
     public class UpdateLinkCommand : IRequest
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Başlık alanı boş bırakılamaz!")]
         public string Title { get; set; } = "";
+        [Required(ErrorMessage = "URL alanı boş bırakılamaz!")]
         public string Url { get; set; } = "";
         public string Category { get; set; } = "";
         public string Description { get; set; } = "";
